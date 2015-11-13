@@ -32,10 +32,15 @@ class Permission
         $this->loadRoutes();
     }
 
-    protected function loadRoutes() {
-        $stmt = $this->pdo->prepare("select * from system_routes");
+    public function loadRoutes() {
+        $stmt = $this->pdo->prepare("select uri from system_routes");
         $stmt->execute();
         $this->routes = $stmt->fetchAll();
+    }
+
+    public function addRoute($uri) {
+        $stmt = $this->pdo->prepare("insert into system_routes VALUES (?) ");
+        $stmt->execute([$uri]);
     }
 
     /**
@@ -62,14 +67,25 @@ class Permission
         }
     }
 
-
+    /**
+     * @param $key
+     * @return bool
+     */
     public function getPermissions($key) {
-        $stmt = $this->pdo->prepare("select * from permitted_routes where key = ?");
+        $stmt = $this->pdo->prepare("select uri from permitted_routes where key = ?");
         return $stmt->execute([$key]);
     }
 
-    public function setPermissions($key, $routes) {
-
+    /**
+     * @param       $key
+     * @param array $routes
+     */
+    public function setPermissions($key, $routes = []) {
+        $this->pdo->query("delete from permitted_routes where key = ?");
+        $stmt = $this->pdo->prepare("insert into `permitted_routes` (key, uri) values(?,?)");
+        foreach ($routes as $route) {
+            $stmt->execute([$key, $route]);
+        }
     }
 
     /**
@@ -90,7 +106,18 @@ class Permission
 
 
     public function migrate() {
-        $stmt = $this->pdo->prepare("");
+        $this->pdo->query("CREATE TABLE `system_routes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uri` varchar(128) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1");
+
+        $this->pdo->query("CREATE TABLE `permitted_routes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `key` varchar(255) DEFAULT NULL,
+  `uri` varchar(64) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1");
     }
 
 }
