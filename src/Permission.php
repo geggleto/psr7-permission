@@ -64,7 +64,8 @@ class Permission
 
 
     public function getPermissions($key) {
-        $stmt = $this->pdo->prepare("");
+        $stmt = $this->pdo->prepare("select * from permitted_routes where key = ?");
+        return $stmt->execute([$key]);
     }
 
     public function setPermissions($key, $routes) {

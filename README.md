@@ -26,6 +26,19 @@ This middleware will throw exceptions if there is a problem or the user does not
 5. Permission:migrate()
 
     Setup the database tables
+    
+    
+## Usage
+
+```php
+
+//In Slim 3
+
+$permission = new Geggleto\Service\Permission($container['pdo']);
+
+$app->add($permission);
+
+```
  
  
  
