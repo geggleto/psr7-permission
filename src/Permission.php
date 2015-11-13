@@ -67,6 +67,10 @@ class Permission
         $stmt = $this->pdo->prepare("");
     }
 
+    public function setPermissions($key, $routes) {
+
+    }
+
     /**
      * @return array
      */
