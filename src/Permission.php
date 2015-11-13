@@ -51,7 +51,7 @@ class Permission
         callable $next)
     {
         if (is_array($requestInterface->getAttribute('permissions'))) {
-            $uri = $requestInterface->getUri()->getBasePath() ."/" . $requestInterface->getUri()->getPath();
+            $uri = $requestInterface->getServerParams()['REQUEST_URI'];
             if (in_array($uri, $requestInterface->getAttribute('permissions'))) {
                 return $next($requestInterface, $responseInterface);
             } else {
@@ -61,7 +61,11 @@ class Permission
             throw new \Exception("Permissions Not Loaded");
         }
     }
-    
+
+
+    public function getPermissions($key) {
+        $stmt = $this->pdo->prepare("");
+    }
 
     /**
      * @return array
