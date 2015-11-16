@@ -12,7 +12,6 @@
   ],
   "require": {
     "psr/http-message": "^1.0",
-    "geggleto/sessionmiddleware" : "^0.0.1"
   },
     "autoload": {
         "psr-4": {
