@@ -14,10 +14,11 @@ If a user attempts to access a resource they are not allowed an Exception is rai
 
 ```php
 
-//In Slim 3
+// In Slim 3
 
 $permission = new Geggleto\Service\Permission($container['system_routes']);
-
+// This will add the permission middleware to the entire site. 
+// This is not likely what you want since non-logged in users will not be able to access anything.
 $app->add($permission);
 
 ```
